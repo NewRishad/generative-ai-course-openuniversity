@@ -1,0 +1,43 @@
+2025-10-04 15:53:48,915 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 15:54:04,888 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 15:54:04,944 - ERROR - jac_code_to_ast: Parse errors encountered - <jaseci.jac.ir.ast_builder.JacAstBuilder object at 0x7d1761402ad0>
+2025-10-04 15:54:04,945 - ERROR - compile_jac: quiz_game.jac: Invalid syntax in Jac code!
+2025-10-04 15:54:04,945 - ERROR - compile_jac: quiz_game.jac: line 1:0 - unparsed:quiz_game.jac:0:0: - mismatched input '""' expecting {<EOF>, 'version', 'type', 'graph', 'node', 'import', 'edge', 'walker', 'async', 'test', 'global'}
+2025-10-04 15:54:04,945 - ERROR - register: quiz_game.jac: Code not registered
+2025-10-04 15:55:19,020 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 15:55:19,053 - ERROR - interface_error: Internal Exception: list index out of range
+2025-10-04 15:57:09,346 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 15:57:09,376 - ERROR - interface_error: Internal Exception: list index out of range
+2025-10-04 15:58:14,161 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 15:58:14,195 - ERROR - interface_error: Internal Exception: list index out of range
+2025-10-04 15:59:13,694 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 15:59:13,722 - ERROR - jac_code_to_ast: Parse errors encountered - <jaseci.jac.ir.ast_builder.JacAstBuilder object at 0x793396723b50>
+2025-10-04 15:59:13,723 - ERROR - compile_jac: quiz_game.jac: Invalid syntax in Jac code!
+2025-10-04 15:59:13,723 - ERROR - compile_jac: quiz_game.jac: line 3:0 - unparsed:quiz_game.jac:0:0: - mismatched input 'obj' expecting {<EOF>, 'version', 'type', 'graph', 'node', 'import', 'edge', 'walker', 'async', 'test', 'global'}
+2025-10-04 15:59:13,723 - ERROR - register: quiz_game.jac: Code not registered
+2025-10-04 16:00:54,257 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 16:00:54,283 - ERROR - jac_code_to_ast: Parse errors encountered - <jaseci.jac.ir.ast_builder.JacAstBuilder object at 0x77cd8623ba10>
+2025-10-04 16:00:54,284 - ERROR - compile_jac: quiz_game.jac: Invalid syntax in Jac code!
+2025-10-04 16:00:54,284 - ERROR - compile_jac: quiz_game.jac: line 5:17 - unparsed:quiz_game.jac:0:0: - mismatched input ':' expecting {';', ','}
+2025-10-04 16:00:54,284 - ERROR - compile_jac: quiz_game.jac: line 6:13 - unparsed:quiz_game.jac:0:0: - mismatched input ':' expecting {';', ','}
+2025-10-04 16:00:54,284 - ERROR - compile_jac: quiz_game.jac: line 14:0 - unparsed:quiz_game.jac:0:0: - extraneous input 'with' expecting {<EOF>, 'type', 'graph', 'node', 'edge', 'walker', 'async', 'test', 'global'}
+2025-10-04 16:00:54,285 - ERROR - register: quiz_game.jac: Code not registered
+2025-10-04 16:02:07,796 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 16:02:08,041 - ERROR - jac_code_to_ast: Parse errors encountered - <jaseci.jac.ir.ast_builder.JacAstBuilder object at 0x7cdfa160ab90>
+2025-10-04 16:02:08,042 - ERROR - compile_jac: quiz_game.jac: Invalid syntax in Jac code!
+2025-10-04 16:02:08,042 - ERROR - compile_jac: quiz_game.jac: line 5:12 - unparsed:quiz_game.jac:0:0: - no viable alternative at input 'caninit;'
+2025-10-04 16:02:08,042 - ERROR - compile_jac: quiz_game.jac: line 13:23 - unparsed:quiz_game.jac:0:0: - no viable alternative at input 'here++>Quiz;'
+2025-10-04 16:02:08,043 - ERROR - compile_jac: quiz_game.jac: line 14:13 - unparsed:quiz_game.jac:0:0: - mismatched input 'Quiz' expecting {';', 'else'}
+2025-10-04 16:02:08,043 - ERROR - register: quiz_game.jac: Code not registered
+2025-10-04 16:02:49,804 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+2025-10-04 16:04:40,631 - ERROR - start: Skipping RedisService due to initialization failure!
+ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
