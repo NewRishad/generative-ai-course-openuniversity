@@ -1,6 +1,0 @@
-2025-10-03 17:10:44,172 - ERROR - start: Skipping RedisService due to initialization failure!
-ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
-2025-10-03 17:10:44,185 - ERROR - jac_code_to_ast: Parse errors encountered - <jaseci.jac.ir.ast_builder.JacAstBuilder object at 0x798e8014cc10>
-2025-10-03 17:10:44,185 - ERROR - compile_jac: quiz_game.jac: Invalid syntax in Jac code!
-2025-10-03 17:10:44,186 - ERROR - compile_jac: quiz_game.jac: line 1:0 - unparsed:quiz_game.jac:0:0: - mismatched input '""' expecting {<EOF>, 'version', 'type', 'graph', 'node', 'import', 'edge', 'walker', 'async', 'test', 'global'}
-2025-10-03 17:10:44,186 - ERROR - register: quiz_game.jac: Code not registered
