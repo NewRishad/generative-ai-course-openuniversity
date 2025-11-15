@@ -35,6 +35,5 @@ with entry {
 
     dog.speak();  # Buddy barks: Woof!
     cat.speak();  # Whiskers meows: Meow!
-
     dog.fetch();  # Buddy fetches the ball!
 }
