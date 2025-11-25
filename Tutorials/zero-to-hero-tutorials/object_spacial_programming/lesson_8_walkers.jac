@@ -5,8 +5,8 @@ node Person {
         print(f"I am {self.name} and the walker:{visitor} is visiting me!");
     }
 }
-# Walkers are objects that move through the graph, visiting nodes 
-# and performing actions
+
+# Walkers are objects that move through the graph, visiting nodes and performing actions
 walker Greeter {
     # Runs when walker spawns at root
     can start with `root entry {
@@ -35,3 +35,9 @@ with entry {
     # Spawn walker
     root spawn Greeter();
 }
+
+# Personal Summary
+# The walker can be used in 2 ways:
+    # 1. You can send it to look through specific nodes (maybe even relationships) and have it perform a certain function
+    # 2. They can also be referenced in the calling object to do a specific behaviour in that node. 
+        # The example here is the Person node printing it's information along with the walker info

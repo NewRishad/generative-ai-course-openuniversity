@@ -1,7 +1,15 @@
 # Square brackets [] let you query connections
-node Person {
+node User {
     has name: str;
 }
+
+node Skills {
+    has skill: str;
+}
+edge Currently_has {
+    has something: str;
+}
+
 edge Friend {
     has since: int;
 }
