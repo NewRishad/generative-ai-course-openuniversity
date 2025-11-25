@@ -2,15 +2,23 @@
 # Pages
 cl import from react {useState, useEffect}
 cl {
+    # A componenet to display a single todo
+    def TodoItem(props: any) -> any {
+        return 
+        <div>
+            <input type="checkbox" checked={props.done}/>
+            <span>{props.text}</span>
+            <button>Delete</button>
+        </div>;
+    }
+
     def app() -> any {
-        let [count, setCount] = useState(0);
-        useEffect(lambda -> None {
-            console.log("Count: ", count);
-        }, [count]);
-        return <div>
-            <h1>Hello, World!</h1>
-            <p>Count: {count}</p>
-            <button onClick={lambda e: any ->  None {setCount(count + 1);}}>Increment</button>
+        return 
+        <div>
+            <h1>My Todos</h1>
+            <TodoItem text="Learn Jac basics" done={true}/>
+            <TodoItem text="Build a todo app" done={false}/>
+            <TodoItem text="Deploy to production" done={false}/>
         </div>;
     }
 }
