@@ -1,5 +1,5 @@
 import {__jacJsx, __jacSpawn} from "@jac-client/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function TodoInput(props) {
   return __jacJsx("div", {"style": {"display": "flex", "gap": "8px", "marginBottom": "16px"}}, [__jacJsx("input", {"type": "text", "value": props.input, "onChange": e => {
     props.setInput(e.target.value);
@@ -38,6 +38,24 @@ function app() {
   let [todos, setTodos] = useState([]);
   let [input, setInput] = useState("");
   let [filter, setFilter] = useState("all");
+  let [loading, setLoading] = useState(true);
+  let [lastSaved, setLastSaved] = useState(null);
+  useEffect(() => {
+    console.log("Loading todos...");
+    setTimeout(() => {
+      let saved = localStorage.getItem("todos");
+      if (saved) {
+        let parsed = JSON.parse(saved);
+        setTodos(parsed);
+      }
+      setLoading(false);
+    }, 2000);
+  }, []);
+  useEffect(() => {
+    if (!loading && todos.length > 0) {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    }
+  }, [todos]);
   function addTodo() {
     if (!input.trim()) {
       return;
@@ -72,6 +90,9 @@ function app() {
     return todos;
   }
   let filteredTodos = getFilteredTodos();
+  if (loading) {
+    return __jacJsx("div", {"style": {"display": "flex", "justifyContent": "center", "alignItems": "center", "height": "100vh"}}, [__jacJsx("h2", {}, ["Loading todos..."])]);
+  }
   return __jacJsx("div", {"style": {"maxWidth": "600px", "margin": "20px auto", "padding": "20px"}}, [__jacJsx("h1", {}, ["My Todos"]), __jacJsx(TodoInput, {"input": input, "setInput": setInput, "addTodo": addTodo}, []), __jacJsx(TodoFilters, {"filter": filter, "setFilter": setFilter}, []), __jacJsx("div", {}, [filteredTodos.map(todo => {
     return __jacJsx(TodoItem, {"key": todo["id"], "id": todo["id"], "text": todo["text"], "done": todo["done"], "toggleTodo": toggleTodo, "deleteTodo": deleteTodo}, []);
   })])]);

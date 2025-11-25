@@ -5,7 +5,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 import { __jacJsx, __jacSpawn } from "@jac-client/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function TodoInput(props) {
   return __jacJsx("div", {
     "style": {
@@ -164,6 +164,30 @@ function app() {
     _useState6 = _slicedToArray(_useState5, 2),
     filter = _useState6[0],
     setFilter = _useState6[1];
+  var _useState7 = useState(true),
+    _useState8 = _slicedToArray(_useState7, 2),
+    loading = _useState8[0],
+    setLoading = _useState8[1];
+  var _useState9 = useState(null),
+    _useState0 = _slicedToArray(_useState9, 2),
+    lastSaved = _useState0[0],
+    setLastSaved = _useState0[1];
+  useEffect(function () {
+    console.log("Loading todos...");
+    setTimeout(function () {
+      var saved = localStorage.getItem("todos");
+      if (saved) {
+        var parsed = JSON.parse(saved);
+        setTodos(parsed);
+      }
+      setLoading(false);
+    }, 2000);
+  }, []);
+  useEffect(function () {
+    if (!loading && todos.length > 0) {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    }
+  }, [todos]);
   function addTodo() {
     if (!input.trim()) {
       return;
@@ -206,6 +230,16 @@ function app() {
     return todos;
   }
   var filteredTodos = getFilteredTodos();
+  if (loading) {
+    return __jacJsx("div", {
+      "style": {
+        "display": "flex",
+        "justifyContent": "center",
+        "alignItems": "center",
+        "height": "100vh"
+      }
+    }, [__jacJsx("h2", {}, ["Loading todos..."])]);
+  }
   return __jacJsx("div", {
     "style": {
       "maxWidth": "600px",

@@ -1,4 +1,4 @@
-cl import from react {useState} # add cl to beginning and no semi-colon at the end
+cl import from react {useState, useEffect} # add cl to beginning and no semi-colon at the end
 
 cl {
     # Component 1: Todo Input
@@ -170,6 +170,37 @@ cl {
         let [todos, setTodos] = useState([]);
         let [input, setInput] = useState("");
         let [filter, setFilter] = useState("all");
+        let [loading, setLoading] = useState(true);
+        let [lastSaved, setLastSaved] = useState(None);
+
+        # Run once when component mounts
+        # useEffect(lambda -> None {
+        #     console.log("App loaded!");
+        # }, []);
+
+        # Load todos from localStorage when app mounts
+        useEffect(lambda -> None {
+            console.log("Loading todos...");
+
+            # Simulate loading delay
+            setTimeout(lambda -> None {
+                let saved = localStorage.getItem("todos");
+                if saved {
+                    let parsed = JSON.parse(saved);
+                    setTodos(parsed);
+                }
+                setLoading(false);
+            }, 2000);
+        }, []);
+
+        # Save todos to localStorage whenever they change
+        useEffect(lambda -> None {
+            if not loading and todos.length > 0 {
+                localStorage.setItem("todos", JSON.stringify(todos));
+                # setLastSaved(Date().toLocaleTimeString());
+            }
+        }, [todos]);
+
 
         # Add todo
         def addTodo() -> None {
@@ -223,6 +254,17 @@ cl {
         }
 
         filteredTodos = getFilteredTodos();
+
+         if loading {
+            return <div style={{
+                "display": "flex",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "height": "100vh"
+            }}>
+                <h2>Loading todos...</h2>
+            </div>;
+        }
 
         return <div style={{
             "maxWidth": "600px",
