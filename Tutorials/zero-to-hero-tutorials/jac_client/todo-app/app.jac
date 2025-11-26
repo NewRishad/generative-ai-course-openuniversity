@@ -43,8 +43,242 @@ walker delete_todo {
 
 # Frontend
 cl import from react {useState, useEffect} # add cl to beginning and no semi-colon at the end
+cl import from "@jac-client/utils" {
+    jacLogin,
+    jacSignup,
+    jacLogout,
+    jacIsLoggedIn
+}
 
 cl {
+    # Login page Componenet
+    def LoginPage() -> any {
+        let [username, setUsername] = useState("");
+        let [password, setPassword] = useState("");
+        let [error, setError] = useState("");
+
+        async def handleLogin(e: any) -> None {
+            e.preventDefault();
+            setError("");
+
+            if not username or not password {
+                setError("Please fill in all fields");
+                return;
+            }
+
+            success = await jacLogin(username, password);
+            if success {
+                console.log("Login successful!");
+            } else {
+                setError("Invalid credentials");
+            }
+        }
+
+        def handleUsernameChange(e: any) -> None {
+            setUsername(e.target.value);
+        }
+
+        def handlePasswordChange(e: any) -> None {
+            setPassword(e.target.value);
+        }
+
+        let errorDisplay = None;
+        if error {
+            errorDisplay = <div style={{
+                "color": "#dc2626",
+                "fontSize": "14px",
+                "marginBottom": "10px"
+            }}>
+                {error}
+            </div>;
+        }
+
+        return <div style={{
+            "minHeight": "100vh",
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "background": "#f5f5f5"
+        }}>
+            <div style={{
+                "background": "#ffffff",
+                "padding": "30px",
+                "borderRadius": "8px",
+                "width": "280px",
+                "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"
+            }}>
+                <h2 style={{"marginBottom": "20px"}}>Login</h2>
+                <form onSubmit={handleLogin}>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={handleUsernameChange}
+                        placeholder="Username"
+                        style={{
+                            "width": "100%",
+                            "padding": "8px",
+                            "marginBottom": "10px",
+                            "border": "1px solid #ddd",
+                            "borderRadius": "4px",
+                            "boxSizing": "border-box"
+                        }}
+                    />
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        placeholder="Password"
+                        style={{
+                            "width": "100%",
+                            "padding": "8px",
+                            "marginBottom": "10px",
+                            "border": "1px solid #ddd",
+                            "borderRadius": "4px",
+                            "boxSizing": "border-box"
+                        }}
+                    />
+                    {errorDisplay}
+                    <button
+                        type="submit"
+                        style={{
+                            "width": "100%",
+                            "padding": "8px",
+                            "background": "#3b82f6",
+                            "color": "#ffffff",
+                            "border": "none",
+                            "borderRadius": "4px",
+                            "cursor": "pointer",
+                            "fontWeight": "600"
+                        }}
+                    >
+                        Login
+                    </button>
+                </form>
+                <p style={{
+                    "textAlign": "center",
+                    "marginTop": "12px",
+                    "fontSize": "14px"
+                }}>
+                    Need an account? Sign up link here
+                </p>
+            </div>
+        </div>;
+    }
+
+    # SignUp page Component
+    def SignupPage() -> any {
+       let [username, setUsername] = useState("");
+        let [password, setPassword] = useState("");
+        let [error, setError] = useState("");
+
+        async def handleSignup(e: any) -> None {
+            e.preventDefault();
+            setError("");
+
+            if not username or not password {
+                setError("Please fill in all fields");
+                return;
+            }
+
+            result = await jacSignup(username, password);
+            if result["success"] {
+                console.log("Signup successful!");
+            } else {
+                setError(result["error"] if result["error"] else "Signup failed");
+            }
+        }
+
+        def handleUsernameChange(e: any) -> None {
+            setUsername(e.target.value);
+        }
+
+        def handlePasswordChange(e: any) -> None {
+            setPassword(e.target.value);
+        }
+
+        let errorDisplay = None;
+        if error {
+            errorDisplay = <div style={{
+                "color": "#dc2626",
+                "fontSize": "14px",
+                "marginBottom": "10px"
+            }}>
+                {error}
+            </div>;
+        }
+
+        return <div style={{
+            "minHeight": "100vh",
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "background": "#f5f5f5"
+        }}>
+            <div style={{
+                "background": "#ffffff",
+                "padding": "30px",
+                "borderRadius": "8px",
+                "width": "280px",
+                "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"
+            }}>
+                <h2 style={{"marginBottom": "20px"}}>Sign Up</h2>
+                <form onSubmit={handleSignup}>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={handleUsernameChange}
+                        placeholder="Username"
+                        style={{
+                            "width": "100%",
+                            "padding": "8px",
+                            "marginBottom": "10px",
+                            "border": "1px solid #ddd",
+                            "borderRadius": "4px",
+                            "boxSizing": "border-box"
+                        }}
+                    />
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        placeholder="Password"
+                        style={{
+                            "width": "100%",
+                            "padding": "8px",
+                            "marginBottom": "10px",
+                            "border": "1px solid #ddd",
+                            "borderRadius": "4px",
+                            "boxSizing": "border-box"
+                        }}
+                    />
+                    {errorDisplay}
+                    <button
+                        type="submit"
+                        style={{
+                            "width": "100%",
+                            "padding": "8px",
+                            "background": "#3b82f6",
+                            "color": "#ffffff",
+                            "border": "none",
+                            "borderRadius": "4px",
+                            "cursor": "pointer",
+                            "fontWeight": "600"
+                        }}
+                    >
+                        Sign Up
+                    </button>
+                </form>
+                <p style={{
+                    "textAlign": "center",
+                    "marginTop": "12px",
+                    "fontSize": "14px"
+                }}>
+                    Have an account? Login link here
+                </p>
+            </div>
+        </div>;
+    }
+
     # Component 1: Todo Input
     def TodoInput(props: any) -> any {
         return <div style={{
@@ -210,7 +444,14 @@ cl {
         }
 
     # Main App
-    def app() -> any {
+    def TodoPage() -> any {
+        # Check if user is logged in
+        if not jacIsLoggedIn() {
+            return <div style={{"padding": "20px"}}>
+                <h1>Please login to view todos</h1>
+            </div>;
+        }
+
         let [todos, setTodos] = useState([]);
         let [input, setInput] = useState("");
         let [filter, setFilter] = useState("all");
@@ -359,5 +600,9 @@ cl {
                 })}
             </div>
         </div>;
+    }
+
+    def app() -> any {
+        return <LoginPage />;
     }
 }

@@ -1,5 +1,66 @@
 import {__jacJsx, __jacSpawn} from "@jac-client/utils";
 import { useState, useEffect } from "react";
+import { jacLogin, jacSignup, jacLogout, jacIsLoggedIn } from "@jac-client/utils";
+function LoginPage() {
+  let [username, setUsername] = useState("");
+  let [password, setPassword] = useState("");
+  let [error, setError] = useState("");
+  async function handleLogin(e) {
+    e.preventDefault();
+    setError("");
+    if (!username || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+    let success = await jacLogin(username, password);
+    if (success) {
+      console.log("Login successful!");
+    } else {
+      setError("Invalid credentials");
+    }
+  }
+  function handleUsernameChange(e) {
+    setUsername(e.target.value);
+  }
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+  let errorDisplay = null;
+  if (error) {
+    errorDisplay = __jacJsx("div", {"style": {"color": "#dc2626", "fontSize": "14px", "marginBottom": "10px"}}, [error]);
+  }
+  return __jacJsx("div", {"style": {"minHeight": "100vh", "display": "flex", "alignItems": "center", "justifyContent": "center", "background": "#f5f5f5"}}, [__jacJsx("div", {"style": {"background": "#ffffff", "padding": "30px", "borderRadius": "8px", "width": "280px", "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"}}, [__jacJsx("h2", {"style": {"marginBottom": "20px"}}, ["Login"]), __jacJsx("form", {"onSubmit": handleLogin}, [__jacJsx("input", {"type": "text", "value": username, "onChange": handleUsernameChange, "placeholder": "Username", "style": {"width": "100%", "padding": "8px", "marginBottom": "10px", "border": "1px solid #ddd", "borderRadius": "4px", "boxSizing": "border-box"}}, []), __jacJsx("input", {"type": "password", "value": password, "onChange": handlePasswordChange, "placeholder": "Password", "style": {"width": "100%", "padding": "8px", "marginBottom": "10px", "border": "1px solid #ddd", "borderRadius": "4px", "boxSizing": "border-box"}}, []), errorDisplay, __jacJsx("button", {"type": "submit", "style": {"width": "100%", "padding": "8px", "background": "#3b82f6", "color": "#ffffff", "border": "none", "borderRadius": "4px", "cursor": "pointer", "fontWeight": "600"}}, ["Login"])]), __jacJsx("p", {"style": {"textAlign": "center", "marginTop": "12px", "fontSize": "14px"}}, ["Need an account? Sign up link here"])])]);
+}
+function SignupPage() {
+  let [username, setUsername] = useState("");
+  let [password, setPassword] = useState("");
+  let [error, setError] = useState("");
+  async function handleSignup(e) {
+    e.preventDefault();
+    setError("");
+    if (!username || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+    let result = await jacSignup(username, password);
+    if (result["success"]) {
+      console.log("Signup successful!");
+    } else {
+      setError(result["error"] ? result["error"] : "Signup failed");
+    }
+  }
+  function handleUsernameChange(e) {
+    setUsername(e.target.value);
+  }
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+  let errorDisplay = null;
+  if (error) {
+    errorDisplay = __jacJsx("div", {"style": {"color": "#dc2626", "fontSize": "14px", "marginBottom": "10px"}}, [error]);
+  }
+  return __jacJsx("div", {"style": {"minHeight": "100vh", "display": "flex", "alignItems": "center", "justifyContent": "center", "background": "#f5f5f5"}}, [__jacJsx("div", {"style": {"background": "#ffffff", "padding": "30px", "borderRadius": "8px", "width": "280px", "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"}}, [__jacJsx("h2", {"style": {"marginBottom": "20px"}}, ["Sign Up"]), __jacJsx("form", {"onSubmit": handleSignup}, [__jacJsx("input", {"type": "text", "value": username, "onChange": handleUsernameChange, "placeholder": "Username", "style": {"width": "100%", "padding": "8px", "marginBottom": "10px", "border": "1px solid #ddd", "borderRadius": "4px", "boxSizing": "border-box"}}, []), __jacJsx("input", {"type": "password", "value": password, "onChange": handlePasswordChange, "placeholder": "Password", "style": {"width": "100%", "padding": "8px", "marginBottom": "10px", "border": "1px solid #ddd", "borderRadius": "4px", "boxSizing": "border-box"}}, []), errorDisplay, __jacJsx("button", {"type": "submit", "style": {"width": "100%", "padding": "8px", "background": "#3b82f6", "color": "#ffffff", "border": "none", "borderRadius": "4px", "cursor": "pointer", "fontWeight": "600"}}, ["Sign Up"])]), __jacJsx("p", {"style": {"textAlign": "center", "marginTop": "12px", "fontSize": "14px"}}, ["Have an account? Login link here"])])]);
+}
 function TodoInput(props) {
   return __jacJsx("div", {"style": {"display": "flex", "gap": "8px", "marginBottom": "16px"}}, [__jacJsx("input", {"type": "text", "value": props.input, "onChange": e => {
     props.setInput(e.target.value);
@@ -34,7 +95,10 @@ function TodoList(props) {
   }
   return __jacJsx("div", {}, [__jacJsx(TodoItem, {"text": "Learn Jac basics", "done": true}, []), __jacJsx(TodoItem, {"text": "Build a todo app", "done": false}, []), __jacJsx(TodoItem, {"text": "Deploy to production", "done": false}, [])]);
 }
-function app() {
+function TodoPage() {
+  if (!jacIsLoggedIn()) {
+    return __jacJsx("div", {"style": {"padding": "20px"}}, [__jacJsx("h1", {}, ["Please login to view todos"])]);
+  }
   let [todos, setTodos] = useState([]);
   let [input, setInput] = useState("");
   let [filter, setFilter] = useState("all");
@@ -97,4 +161,7 @@ function app() {
     return __jacJsx(TodoItem, {"key": todo._jac_id, "id": todo._jac_id, "text": todo.text, "done": todo.done, "toggleTodo": toggleTodo, "deleteTodo": deleteTodo}, []);
   })])]);
 }
-export { TodoFilters, TodoInput, TodoItem, TodoList, app };
+function app() {
+  return __jacJsx(LoginPage, {}, []);
+}
+export { LoginPage, SignupPage, TodoFilters, TodoInput, TodoItem, TodoList, TodoPage, app };

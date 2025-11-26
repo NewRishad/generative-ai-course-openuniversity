@@ -10,6 +10,269 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 import { __jacJsx, __jacSpawn } from "@jac-client/utils";
 import { useState, useEffect } from "react";
+import { jacLogin, jacSignup, jacLogout, jacIsLoggedIn } from "@jac-client/utils";
+function LoginPage() {
+  var _useState = useState(""),
+    _useState2 = _slicedToArray(_useState, 2),
+    username = _useState2[0],
+    setUsername = _useState2[1];
+  var _useState3 = useState(""),
+    _useState4 = _slicedToArray(_useState3, 2),
+    password = _useState4[0],
+    setPassword = _useState4[1];
+  var _useState5 = useState(""),
+    _useState6 = _slicedToArray(_useState5, 2),
+    error = _useState6[0],
+    setError = _useState6[1];
+  function handleLogin(_x) {
+    return _handleLogin.apply(this, arguments);
+  }
+  function _handleLogin() {
+    _handleLogin = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(e) {
+      var success;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
+          case 0:
+            e.preventDefault();
+            setError("");
+            if (!(!username || !password)) {
+              _context.n = 1;
+              break;
+            }
+            setError("Please fill in all fields");
+            return _context.a(2);
+          case 1:
+            _context.n = 2;
+            return jacLogin(username, password);
+          case 2:
+            success = _context.v;
+            if (success) {
+              console.log("Login successful!");
+            } else {
+              setError("Invalid credentials");
+            }
+          case 3:
+            return _context.a(2);
+        }
+      }, _callee);
+    }));
+    return _handleLogin.apply(this, arguments);
+  }
+  function handleUsernameChange(e) {
+    setUsername(e.target.value);
+  }
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+  var errorDisplay = null;
+  if (error) {
+    errorDisplay = __jacJsx("div", {
+      "style": {
+        "color": "#dc2626",
+        "fontSize": "14px",
+        "marginBottom": "10px"
+      }
+    }, [error]);
+  }
+  return __jacJsx("div", {
+    "style": {
+      "minHeight": "100vh",
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "background": "#f5f5f5"
+    }
+  }, [__jacJsx("div", {
+    "style": {
+      "background": "#ffffff",
+      "padding": "30px",
+      "borderRadius": "8px",
+      "width": "280px",
+      "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"
+    }
+  }, [__jacJsx("h2", {
+    "style": {
+      "marginBottom": "20px"
+    }
+  }, ["Login"]), __jacJsx("form", {
+    "onSubmit": handleLogin
+  }, [__jacJsx("input", {
+    "type": "text",
+    "value": username,
+    "onChange": handleUsernameChange,
+    "placeholder": "Username",
+    "style": {
+      "width": "100%",
+      "padding": "8px",
+      "marginBottom": "10px",
+      "border": "1px solid #ddd",
+      "borderRadius": "4px",
+      "boxSizing": "border-box"
+    }
+  }, []), __jacJsx("input", {
+    "type": "password",
+    "value": password,
+    "onChange": handlePasswordChange,
+    "placeholder": "Password",
+    "style": {
+      "width": "100%",
+      "padding": "8px",
+      "marginBottom": "10px",
+      "border": "1px solid #ddd",
+      "borderRadius": "4px",
+      "boxSizing": "border-box"
+    }
+  }, []), errorDisplay, __jacJsx("button", {
+    "type": "submit",
+    "style": {
+      "width": "100%",
+      "padding": "8px",
+      "background": "#3b82f6",
+      "color": "#ffffff",
+      "border": "none",
+      "borderRadius": "4px",
+      "cursor": "pointer",
+      "fontWeight": "600"
+    }
+  }, ["Login"])]), __jacJsx("p", {
+    "style": {
+      "textAlign": "center",
+      "marginTop": "12px",
+      "fontSize": "14px"
+    }
+  }, ["Need an account? Sign up link here"])])]);
+}
+function SignupPage() {
+  var _useState7 = useState(""),
+    _useState8 = _slicedToArray(_useState7, 2),
+    username = _useState8[0],
+    setUsername = _useState8[1];
+  var _useState9 = useState(""),
+    _useState0 = _slicedToArray(_useState9, 2),
+    password = _useState0[0],
+    setPassword = _useState0[1];
+  var _useState1 = useState(""),
+    _useState10 = _slicedToArray(_useState1, 2),
+    error = _useState10[0],
+    setError = _useState10[1];
+  function handleSignup(_x2) {
+    return _handleSignup.apply(this, arguments);
+  }
+  function _handleSignup() {
+    _handleSignup = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(e) {
+      var result;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.n) {
+          case 0:
+            e.preventDefault();
+            setError("");
+            if (!(!username || !password)) {
+              _context2.n = 1;
+              break;
+            }
+            setError("Please fill in all fields");
+            return _context2.a(2);
+          case 1:
+            _context2.n = 2;
+            return jacSignup(username, password);
+          case 2:
+            result = _context2.v;
+            if (result["success"]) {
+              console.log("Signup successful!");
+            } else {
+              setError(result["error"] ? result["error"] : "Signup failed");
+            }
+          case 3:
+            return _context2.a(2);
+        }
+      }, _callee2);
+    }));
+    return _handleSignup.apply(this, arguments);
+  }
+  function handleUsernameChange(e) {
+    setUsername(e.target.value);
+  }
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+  var errorDisplay = null;
+  if (error) {
+    errorDisplay = __jacJsx("div", {
+      "style": {
+        "color": "#dc2626",
+        "fontSize": "14px",
+        "marginBottom": "10px"
+      }
+    }, [error]);
+  }
+  return __jacJsx("div", {
+    "style": {
+      "minHeight": "100vh",
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "background": "#f5f5f5"
+    }
+  }, [__jacJsx("div", {
+    "style": {
+      "background": "#ffffff",
+      "padding": "30px",
+      "borderRadius": "8px",
+      "width": "280px",
+      "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"
+    }
+  }, [__jacJsx("h2", {
+    "style": {
+      "marginBottom": "20px"
+    }
+  }, ["Sign Up"]), __jacJsx("form", {
+    "onSubmit": handleSignup
+  }, [__jacJsx("input", {
+    "type": "text",
+    "value": username,
+    "onChange": handleUsernameChange,
+    "placeholder": "Username",
+    "style": {
+      "width": "100%",
+      "padding": "8px",
+      "marginBottom": "10px",
+      "border": "1px solid #ddd",
+      "borderRadius": "4px",
+      "boxSizing": "border-box"
+    }
+  }, []), __jacJsx("input", {
+    "type": "password",
+    "value": password,
+    "onChange": handlePasswordChange,
+    "placeholder": "Password",
+    "style": {
+      "width": "100%",
+      "padding": "8px",
+      "marginBottom": "10px",
+      "border": "1px solid #ddd",
+      "borderRadius": "4px",
+      "boxSizing": "border-box"
+    }
+  }, []), errorDisplay, __jacJsx("button", {
+    "type": "submit",
+    "style": {
+      "width": "100%",
+      "padding": "8px",
+      "background": "#3b82f6",
+      "color": "#ffffff",
+      "border": "none",
+      "borderRadius": "4px",
+      "cursor": "pointer",
+      "fontWeight": "600"
+    }
+  }, ["Sign Up"])]), __jacJsx("p", {
+    "style": {
+      "textAlign": "center",
+      "marginTop": "12px",
+      "fontSize": "14px"
+    }
+  }, ["Have an account? Login link here"])])]);
+}
 function TodoInput(props) {
   return __jacJsx("div", {
     "style": {
@@ -155,48 +418,55 @@ function TodoList(props) {
     "done": false
   }, [])]);
 }
-function app() {
-  var _useState = useState([]),
-    _useState2 = _slicedToArray(_useState, 2),
-    todos = _useState2[0],
-    setTodos = _useState2[1];
-  var _useState3 = useState(""),
-    _useState4 = _slicedToArray(_useState3, 2),
-    input = _useState4[0],
-    setInput = _useState4[1];
-  var _useState5 = useState("all"),
-    _useState6 = _slicedToArray(_useState5, 2),
-    filter = _useState6[0],
-    setFilter = _useState6[1];
-  var _useState7 = useState(false),
-    _useState8 = _slicedToArray(_useState7, 2),
-    loading = _useState8[0],
-    setLoading = _useState8[1];
-  var _useState9 = useState(null),
-    _useState0 = _slicedToArray(_useState9, 2),
-    lastSaved = _useState0[0],
-    setLastSaved = _useState0[1];
+function TodoPage() {
+  if (!jacIsLoggedIn()) {
+    return __jacJsx("div", {
+      "style": {
+        "padding": "20px"
+      }
+    }, [__jacJsx("h1", {}, ["Please login to view todos"])]);
+  }
+  var _useState11 = useState([]),
+    _useState12 = _slicedToArray(_useState11, 2),
+    todos = _useState12[0],
+    setTodos = _useState12[1];
+  var _useState13 = useState(""),
+    _useState14 = _slicedToArray(_useState13, 2),
+    input = _useState14[0],
+    setInput = _useState14[1];
+  var _useState15 = useState("all"),
+    _useState16 = _slicedToArray(_useState15, 2),
+    filter = _useState16[0],
+    setFilter = _useState16[1];
+  var _useState17 = useState(false),
+    _useState18 = _slicedToArray(_useState17, 2),
+    loading = _useState18[0],
+    setLoading = _useState18[1];
+  var _useState19 = useState(null),
+    _useState20 = _slicedToArray(_useState19, 2),
+    lastSaved = _useState20[0],
+    setLastSaved = _useState20[1];
   useEffect(function () {
     function loadTodos() {
       return _loadTodos.apply(this, arguments);
     }
     function _loadTodos() {
-      _loadTodos = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      _loadTodos = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
         var result;
-        return _regenerator().w(function (_context) {
-          while (1) switch (_context.n) {
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.n) {
             case 0:
-              _context.n = 1;
+              _context3.n = 1;
               return __jacSpawn("read_todos", "", {});
             case 1:
-              result = _context.v;
+              result = _context3.v;
               setTodos(result.reports ? result.reports : []);
               console.log("Todo array", todos);
               console.log("results", result);
             case 2:
-              return _context.a(2);
+              return _context3.a(2);
           }
-        }, _callee);
+        }, _callee3);
       }));
       return _loadTodos.apply(this, arguments);
     }
@@ -211,41 +481,41 @@ function app() {
     return _addTodo.apply(this, arguments);
   }
   function _addTodo() {
-    _addTodo = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+    _addTodo = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
       var result;
-      return _regenerator().w(function (_context2) {
-        while (1) switch (_context2.n) {
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.n) {
           case 0:
             if (input.trim()) {
-              _context2.n = 1;
+              _context4.n = 1;
               break;
             }
-            return _context2.a(2);
+            return _context4.a(2);
           case 1:
-            _context2.n = 2;
+            _context4.n = 2;
             return __jacSpawn("create_todo", "", {
               "text": input.trim()
             });
           case 2:
-            result = _context2.v;
+            result = _context4.v;
             setTodos(todos.concat([result.reports[0][0]]));
             setInput("");
           case 3:
-            return _context2.a(2);
+            return _context4.a(2);
         }
-      }, _callee2);
+      }, _callee4);
     }));
     return _addTodo.apply(this, arguments);
   }
-  function toggleTodo(_x) {
+  function toggleTodo(_x3) {
     return _toggleTodo.apply(this, arguments);
   }
   function _toggleTodo() {
-    _toggleTodo = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(id) {
-      return _regenerator().w(function (_context3) {
-        while (1) switch (_context3.n) {
+    _toggleTodo = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(id) {
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.n) {
           case 0:
-            _context3.n = 1;
+            _context5.n = 1;
             return __jacSpawn("toggle_todo", id, {});
           case 1:
             setTodos(todos.map(function (todo) {
@@ -259,30 +529,30 @@ function app() {
               return todo;
             }));
           case 2:
-            return _context3.a(2);
+            return _context5.a(2);
         }
-      }, _callee3);
+      }, _callee5);
     }));
     return _toggleTodo.apply(this, arguments);
   }
-  function deleteTodo(_x2) {
+  function deleteTodo(_x4) {
     return _deleteTodo.apply(this, arguments);
   }
   function _deleteTodo() {
-    _deleteTodo = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(id) {
-      return _regenerator().w(function (_context4) {
-        while (1) switch (_context4.n) {
+    _deleteTodo = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(id) {
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.n) {
           case 0:
-            _context4.n = 1;
+            _context6.n = 1;
             return __jacSpawn("delete_todo", id, {});
           case 1:
             setTodos(todos.filter(function (todo) {
               return todo._jac_id !== id;
             }));
           case 2:
-            return _context4.a(2);
+            return _context6.a(2);
         }
-      }, _callee4);
+      }, _callee6);
     }));
     return _deleteTodo.apply(this, arguments);
   }
@@ -333,4 +603,7 @@ function app() {
     }, []);
   })])]);
 }
-export { TodoFilters, TodoInput, TodoItem, TodoList, app };
+function app() {
+  return __jacJsx(LoginPage, {}, []);
+}
+export { LoginPage, SignupPage, TodoFilters, TodoInput, TodoItem, TodoList, TodoPage, app };
