@@ -1,3 +1,47 @@
+# Backend - Data Model
+node Todo {
+    has text: str;
+    has done: bool = False;
+}
+
+# Backend - Walkers
+walker read_todos {
+    can read with `root entry {
+        visit [-->(`?Todo)];  # tf does this mean? walk until you see todos?
+    }
+
+    can report_todos with Todo entry {
+        report here;
+    }
+}
+
+# Backend - Walker for adding Todos
+walker create_todo {
+    has text: str;
+
+    can create with `root entry {
+        new_todo = here ++> Todo(text=self.text);
+        report new_todo;
+    }
+}
+
+# Backend - Walker to Toggle and Delete
+walker toggle_todo {
+    can toggle with Todo entry {
+        here.done = not here.done;
+        report here;
+    }
+}
+
+# Backend - Walker to Delete
+walker delete_todo {
+    can delete with Todo entry {
+        report here;
+        del here;
+    }
+}
+
+# Frontend
 cl import from react {useState, useEffect} # add cl to beginning and no semi-colon at the end
 
 cl {
@@ -170,7 +214,7 @@ cl {
         let [todos, setTodos] = useState([]);
         let [input, setInput] = useState("");
         let [filter, setFilter] = useState("all");
-        let [loading, setLoading] = useState(true);
+        let [loading, setLoading] = useState(false);
         let [lastSaved, setLastSaved] = useState(None);
 
         # Run once when component mounts
@@ -178,20 +222,31 @@ cl {
         #     console.log("App loaded!");
         # }, []);
 
-        # Load todos from localStorage when app mounts
+        # Load todos from backend when app mounts
         useEffect(lambda -> None {
-            console.log("Loading todos...");
-
-            # Simulate loading delay
-            setTimeout(lambda -> None {
-                let saved = localStorage.getItem("todos");
-                if saved {
-                    let parsed = JSON.parse(saved);
-                    setTodos(parsed);
-                }
-                setLoading(false);
-            }, 2000);
+            async def loadTodos() -> None {
+                result = root spawn read_todos();
+                setTodos(result.reports if result.reports else []);
+                console.log("Todo array", todos);
+                console.log("results", result);
+            }
+            loadTodos();
         }, []);
+
+        # Load todos from localStorage when app mounts
+        # useEffect(lambda -> None {
+        #     console.log("Loading todos...");
+
+        #     # Simulate loading delay
+        #     setTimeout(lambda -> None {
+        #         let saved = localStorage.getItem("todos");
+        #         if saved {
+        #             let parsed = JSON.parse(saved);
+        #             setTodos(parsed);
+        #         }
+        #         setLoading(false);
+        #     }, 2000);
+        # }, []);
 
         # Save todos to localStorage whenever they change
         useEffect(lambda -> None {
@@ -203,29 +258,38 @@ cl {
 
 
         # Add todo
-        def addTodo() -> None {
+        async def addTodo() -> None {  # good practice to use async when calling backend code
             if not input.trim() {
                 return;
             }
 
-            let newTodo = {
-                "id": Date.now(),  # Use timestamp as unique ID
-                "text": input.trim(),
-                "done": false
-            };
+            # let newTodo = {
+            #     "id": Date.now(),  # Use timestamp as unique ID
+            #     "text": input.trim(),
+            #     "done": false
+            # };
+            # setTodos(todos.concat([newTodo]));
 
-            setTodos(todos.concat([newTodo]));
+            # Call backend walker
+            result = root spawn create_todo(text=input.trim());
+            
+            # Add the new todo to local state
+            setTodos(todos.concat([result.reports[0][0]]));
             setInput("");
         }
 
         # Toggle todo
-        def toggleTodo(id: any) -> None {
+        async def toggleTodo(id: any) -> None {
+            # Call backend Walker
+            id spawn toggle_todo();
+
+            # Update the local state
             setTodos(todos.map(lambda todo: any -> any {
-                if todo["id"] == id {
+                if todo._jac_id == id {
                     return {
-                        "id": todo["id"],
-                        "text": todo["text"],
-                        "done": not todo["done"]
+                        "_jac_id": todo._jac_id,
+                        "text": todo.text,
+                        "done": not todo.done
                     };
                 }
                 return todo;
@@ -233,9 +297,16 @@ cl {
         }
 
         # Delete todo
-        def deleteTodo(id: any) -> None {
+        async def deleteTodo(id: any) -> None {
+            # setTodos(todos.filter(lambda todo: any -> bool {
+            #     return todo["id"] != id;
+            # }));
+
+            # Call the backend walker
+            id spawn delete_todo();        # why is this commented out? only deletes in local state
+
             setTodos(todos.filter(lambda todo: any -> bool {
-                return todo["id"] != id;
+                return todo._jac_id != id;
             }));
         }
 
@@ -278,10 +349,10 @@ cl {
             <div>
                 {filteredTodos.map(lambda todo: any -> any {
                     return <TodoItem
-                        key={todo["id"]}
-                        id={todo["id"]}
-                        text={todo["text"]}
-                        done={todo["done"]}
+                        key={todo._jac_id}
+                        id={todo._jac_id}
+                        text={todo.text}
+                        done={todo.done}
                         toggleTodo={toggleTodo}
                         deleteTodo={deleteTodo}
                     />;
