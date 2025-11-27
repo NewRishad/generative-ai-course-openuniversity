@@ -1,3 +1,8 @@
+# Future Improvements:
+    # Easy additions: - Edit todo text - Add due dates - Priority levels (high/medium/low) - Todo categories/tags - Search functionality
+    # Medium difficulty: - Drag-and-drop reordering - Dark mode toggle - Keyboard shortcuts - Undo/redo - Export/import todos
+    # Advanced features: - Real-time collaboration - Recurring todos - Notifications - Attach files to todos - Share lists with others
+
 # Backend - Data Model
 node Todo {
     has text: str;
