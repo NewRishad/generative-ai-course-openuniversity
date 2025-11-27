@@ -57,6 +57,16 @@ cl {
         let [password, setPassword] = useState("");
         let [error, setError] = useState("");
 
+        # Check if already logged in
+        if jacIsLoggedIn() {
+            return <div style={{"padding": "20px"}}>
+                <h2>You're already logged in</h2>
+                <button onClick={lambda -> None { jacLogout(); }}>
+                    Logout
+                </button>
+            </div>;
+        }
+
         async def handleLogin(e: any) -> None {
             e.preventDefault();
             setError("");
