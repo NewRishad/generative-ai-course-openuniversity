@@ -10,7 +10,100 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 import { __jacJsx, __jacSpawn } from "@jac-client/utils";
 import { useState, useEffect } from "react";
-import { jacLogin, jacSignup, jacLogout, jacIsLoggedIn } from "@jac-client/utils";
+import { Router, Routes, Route, Link, Navigate, useNavigate, jacLogin, jacSignup, jacLogout, jacIsLoggedIn } from "@jac-client/utils";
+function Navigation() {
+  var isLoggedIn = jacIsLoggedIn();
+  if (isLoggedIn) {
+    return __jacJsx("nav", {
+      "style": {
+        "padding": "12px 24px",
+        "background": "#3b82f6",
+        "color": "#ffffff",
+        "display": "flex",
+        "justifyContent": "space-between"
+      }
+    }, [__jacJsx("div", {
+      "style": {
+        "fontWeight": "600"
+      }
+    }, ["Todo App"]), __jacJsx("div", {
+      "style": {
+        "display": "flex",
+        "gap": "16px"
+      }
+    }, [__jacJsx(Link, {
+      "to": "/todos",
+      "style": {
+        "color": "#ffffff",
+        "textDecoration": "none"
+      }
+    }, ["Todos"]), __jacJsx("button", {
+      "onClick": function onClick(e) {
+        e.preventDefault();
+        jacLogout();
+        window.location.href = "/page/app#/login";
+      },
+      "style": {
+        "background": "none",
+        "color": "#ffffff",
+        "border": "1px solid #ffffff",
+        "padding": "2px 10px",
+        "borderRadius": "4px",
+        "cursor": "pointer"
+      }
+    }, ["Logout"])])]);
+  }
+  return __jacJsx("nav", {
+    "style": {
+      "padding": "12px 24px",
+      "background": "#3b82f6",
+      "color": "#ffffff",
+      "display": "flex",
+      "justifyContent": "space-between"
+    }
+  }, [__jacJsx("div", {
+    "style": {
+      "fontWeight": "600"
+    }
+  }, ["Todo App"]), __jacJsx("div", {
+    "style": {
+      "display": "flex",
+      "gap": "16px"
+    }
+  }, [__jacJsx(Link, {
+    "to": "/login",
+    "style": {
+      "color": "#ffffff",
+      "textDecoration": "none"
+    }
+  }, ["Login"]), __jacJsx(Link, {
+    "to": "/signup",
+    "style": {
+      "color": "#ffffff",
+      "textDecoration": "none"
+    }
+  }, ["Sign Up"])])]);
+}
+function NotFoundPage() {
+  return __jacJsx("div", {
+    "style": {
+      "textAlign": "center",
+      "padding": "50px"
+    }
+  }, [__jacJsx("h1", {}, ["404 - Page Not Found"]), __jacJsx(Link, {
+    "to": "/"
+  }, ["Go Home"])]);
+}
+function HomePage() {
+  if (jacIsLoggedIn()) {
+    return __jacJsx(Navigate, {
+      "to": "/todos"
+    }, []);
+  }
+  return __jacJsx(Navigate, {
+    "to": "/login"
+  }, []);
+}
 function LoginPage() {
   var _useState = useState(""),
     _useState2 = _slicedToArray(_useState, 2),
@@ -24,6 +117,17 @@ function LoginPage() {
     _useState6 = _slicedToArray(_useState5, 2),
     error = _useState6[0],
     setError = _useState6[1];
+  if (jacIsLoggedIn()) {
+    return __jacJsx("div", {
+      "style": {
+        "padding": "20px"
+      }
+    }, [__jacJsx("h2", {}, ["You're already logged in"]), __jacJsx("button", {
+      "onClick": function onClick() {
+        jacLogout();
+      }
+    }, ["Logout"])]);
+  }
   function handleLogin(_x) {
     return _handleLogin.apply(this, arguments);
   }
@@ -47,7 +151,7 @@ function LoginPage() {
           case 2:
             success = _context.v;
             if (success) {
-              console.log("Login successful!");
+              window.location.href = "/page/app#/todos";
             } else {
               setError("Invalid credentials");
             }
@@ -140,7 +244,9 @@ function LoginPage() {
       "marginTop": "12px",
       "fontSize": "14px"
     }
-  }, ["Need an account? Sign up link here"])])]);
+  }, ["Need an account? ", __jacJsx(Link, {
+    "to": "/signup"
+  }, ["Sign up"])])])]);
 }
 function SignupPage() {
   var _useState7 = useState(""),
@@ -178,7 +284,7 @@ function SignupPage() {
           case 2:
             result = _context2.v;
             if (result["success"]) {
-              console.log("Signup successful!");
+              window.location.href = "/page/app#/todos";
             } else {
               setError(result["error"] ? result["error"] : "Signup failed");
             }
@@ -271,7 +377,9 @@ function SignupPage() {
       "marginTop": "12px",
       "fontSize": "14px"
     }
-  }, ["Have an account? Login link here"])])]);
+  }, ["Have an account? ", __jacJsx(Link, {
+    "to": "/login"
+  }, ["Login"])])])]);
 }
 function TodoInput(props) {
   return __jacJsx("div", {
@@ -418,13 +526,11 @@ function TodoList(props) {
     "done": false
   }, [])]);
 }
-function TodoPage() {
+function TodosPage() {
   if (!jacIsLoggedIn()) {
-    return __jacJsx("div", {
-      "style": {
-        "padding": "20px"
-      }
-    }, [__jacJsx("h1", {}, ["Please login to view todos"])]);
+    return __jacJsx(Navigate, {
+      "to": "/login"
+    }, []);
   }
   var _useState11 = useState([]),
     _useState12 = _slicedToArray(_useState11, 2),
@@ -604,6 +710,25 @@ function TodoPage() {
   })])]);
 }
 function app() {
-  return __jacJsx(LoginPage, {}, []);
+  return __jacJsx(Router, {}, [__jacJsx("div", {
+    "style": {
+      "fontFamily": "system-ui, sans-serif"
+    }
+  }, [__jacJsx(Navigation, {}, []), __jacJsx(Routes, {}, [__jacJsx(Route, {
+    "path": "/",
+    "element": __jacJsx(HomePage, {}, [])
+  }, []), __jacJsx(Route, {
+    "path": "/login",
+    "element": __jacJsx(LoginPage, {}, [])
+  }, []), __jacJsx(Route, {
+    "path": "/signup",
+    "element": __jacJsx(SignupPage, {}, [])
+  }, []), __jacJsx(Route, {
+    "path": "/todos",
+    "element": __jacJsx(TodosPage, {}, [])
+  }, []), __jacJsx(Route, {
+    "path": "*",
+    "element": __jacJsx(NotFoundPage, {}, [])
+  }, [])])])]);
 }
-export { LoginPage, SignupPage, TodoFilters, TodoInput, TodoItem, TodoList, TodoPage, app };
+export { HomePage, LoginPage, Navigation, NotFoundPage, SignupPage, TodoFilters, TodoInput, TodoItem, TodoList, TodosPage, app };

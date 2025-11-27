@@ -44,6 +44,12 @@ walker delete_todo {
 # Frontend
 cl import from react {useState, useEffect} # add cl to beginning and no semi-colon at the end
 cl import from "@jac-client/utils" {
+    Router,
+    Routes,
+    Route,
+    Link,
+    Navigate,
+    useNavigate,
     jacLogin,
     jacSignup,
     jacLogout,
@@ -51,6 +57,95 @@ cl import from "@jac-client/utils" {
 }
 
 cl {
+    # Navigation Component
+    def Navigation() -> any {
+        let isLoggedIn = jacIsLoggedIn();
+
+        if isLoggedIn {
+            return <nav style={{
+                "padding": "12px 24px",
+                "background": "#3b82f6",
+                "color": "#ffffff",
+                "display": "flex",
+                "justifyContent": "space-between"
+            }}>
+                <div style={{"fontWeight": "600"}}>Todo App</div>
+                <div style={{"display": "flex", "gap": "16px"}}>
+                    <Link to="/todos" style={{
+                    "color": "#ffffff",
+                    "textDecoration": "none"
+                    }}>
+                        Todos
+                    </Link>
+                    <button 
+                        onClick={lambda e: any -> None {
+                            e.preventDefault(); # removes all default actions
+                            jacLogout();
+                            window.location.href = "/page/app#/login"; # tf is this #
+                        }}
+                        style={{
+                            "background": "none",
+                            "color": "#ffffff",
+                            "border": "1px solid #ffffff",
+                            "padding": "2px 10px",
+                            "borderRadius": "4px",
+                            "cursor": "pointer"
+                        }}
+                        >
+                            Logout
+                        </button>
+                </div>
+            </nav>;
+        }
+
+        return <nav style={{
+            "padding": "12px 24px",
+            "background": "#3b82f6",
+            "color": "#ffffff",
+            "display": "flex",
+            "justifyContent": "space-between"
+        }}>
+            <div style={{"fontWeight": "600"}}>Todo App</div>
+            <div style={{"display": "flex", "gap": "16px"}}>
+            # Link is prefered as it does not reload the page
+            # Alt = <a href="/login"> Go to Login</a> # this causes the page to reload
+                <Link to="/login" style={{
+                    "color": "#ffffff",
+                    "textDecoration": "none"
+                }}>
+                    Login
+                </Link>
+                <Link to="/signup" style={{
+                    "color": "#ffffff",
+                    "textDecoration": "none"
+                }}>
+                    Sign Up
+                </Link>
+            </div>
+        </nav>;
+    }
+
+    # 404 Not found page
+    def NotFoundPage() -> any {
+        return <div style={{
+            "textAlign": "center",
+            "padding": "50px"
+        }}>
+            <h1>404 - Page Not Found</h1>
+            <Link to="/">Go Home</Link>
+        </div>;
+    }
+
+    # Home Page Componenet
+    def HomePage() -> any {
+        if jacIsLoggedIn() {
+            # Navigate Redirects programmatically
+            return <Navigate to="/todos" />;
+        }
+        return <Navigate to="/login" />;
+    }
+
+
     # Login page Componenet
     def LoginPage() -> any {
         let [username, setUsername] = useState("");
@@ -78,7 +173,8 @@ cl {
 
             success = await jacLogin(username, password);
             if success {
-                console.log("Login successful!");
+                # Navigate to todo 
+                window.location.href = "/page/app#/todos"; # What is the # about after app
             } else {
                 setError("Invalid credentials");
             }
@@ -169,7 +265,7 @@ cl {
                     "marginTop": "12px",
                     "fontSize": "14px"
                 }}>
-                    Need an account? Sign up link here
+                    Need an account? <Link to="/signup">Sign up</Link>
                 </p>
             </div>
         </div>;
@@ -192,8 +288,13 @@ cl {
 
             result = await jacSignup(username, password);
             if result["success"] {
-                console.log("Signup successful!");
+                # window.location.href = "/page/app#/login"
+                window.location.href = "/page/app#/todos"; # I guess this has a better user experience
+                
+                # but shouldn't we log in the user so he passed the TodoPage login checher?
+    
             } else {
+                # interesting way of recieving the error message
                 setError(result["error"] if result["error"] else "Signup failed");
             }
         }
@@ -283,7 +384,7 @@ cl {
                     "marginTop": "12px",
                     "fontSize": "14px"
                 }}>
-                    Have an account? Login link here
+                    Have an account? <Link to="/login">Login</Link>
                 </p>
             </div>
         </div>;
@@ -454,12 +555,10 @@ cl {
         }
 
     # Main App
-    def TodoPage() -> any {
-        # Check if user is logged in
+    def TodosPage() -> any {
+        # Redirect if not logged in
         if not jacIsLoggedIn() {
-            return <div style={{"padding": "20px"}}>
-                <h1>Please login to view todos</h1>
-            </div>;
+            return <Navigate to="/login" />;
         }
 
         let [todos, setTodos] = useState([]);
@@ -613,6 +712,18 @@ cl {
     }
 
     def app() -> any {
-        return <LoginPage />;
+        return <Router>
+            <div style={{"fontFamily": "system-ui, sans-serif"}}>
+                <Navigation />
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/todos" element={<TodosPage />} />
+                    # Putting it at the end catches everything else
+                    <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+            </div>
+        </Router>;
     }
 }
